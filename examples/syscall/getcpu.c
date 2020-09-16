@@ -4,5 +4,5 @@ void  main()
 {
 	  unsigned cpu, node;
 	  syscall (__NR_getcpu, &cpu, &node, 0);
-	  printf("%d\n",cpu);
+	  printf("cpu:%d, numa:%d\n", cpu, node);		
 }
