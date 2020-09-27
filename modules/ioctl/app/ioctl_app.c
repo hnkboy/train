@@ -13,7 +13,7 @@
 
 #include "../dev/ioctl.h"
 
-#define IOCTL_DRIVER_NAME "/dev/ioctl"
+#define IOCTL_DRIVER_NAME "/dev/ioctl_test"
 
 int open_driver(const char* driver_name);
 void close_driver(const char* driver_name, int fd_driver);

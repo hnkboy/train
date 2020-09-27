@@ -1,6 +1,6 @@
 #!/bin/bash
 
-device_name=ioctl
+device_name=ioctl_test
 mode="444"
 
 echo "Loading module $device_name"
@@ -11,7 +11,8 @@ echo "Use lsmod to see all devices loaded"
 
 # retrieve major number
 major=$(cat /proc/devices | grep "$device_name")
-major_number=($major)
+#major_number=($major)
+major_number=$major
 echo "Removing stale nodes"
 rm -f /dev/${device_name}
 echo "Replacing the old nodes"

@@ -2,7 +2,8 @@
     注意：1.用等待队列实现读写阻塞，把globalmem当成FIFO处理
  */
 
-
+#include <linux/kernel.h>
+#include <linux/sched/signal.h>
 #include <linux/module.h>
 #include <linux/cdev.h>
 #include <linux/fs.h>
@@ -11,7 +12,8 @@
 #include <linux/wait.h>
 #include <linux/mutex.h>
 #include <linux/sched.h>
-
+#include <linux/uaccess.h>
+#include <linux/poll.h>
 #define DEV_NAME    "globalmem"
 
 #define GLOBALMEN_LEN    1024
