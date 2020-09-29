@@ -1,0 +1,1 @@
+cmd_/home/jerry/train/modules/kthread/test.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000  --build-id  -T ./scripts/module-common.lds -o /home/jerry/train/modules/kthread/test.ko /home/jerry/train/modules/kthread/test.o /home/jerry/train/modules/kthread/test.mod.o;  true
