@@ -61,5 +61,5 @@ int main(void)
     pthread_cancel(tid);             //关于pthread_cancel，有一点额外的说明，它是从外部终止子线程，子线程会在最近的取消点，退出线程，而在我们的代码里，最近的取消点肯定就是pthread_cond_wait()了。关于取消点的信息，有兴趣可以google,这里不多说了
     pthread_join(tid, NULL);
     printf("All done -- exiting/n");
-    return 0;
+    return 0;//
 }
