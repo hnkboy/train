@@ -1,1 +1,0 @@
-cmd_/home/jerry/train/modules/helloword/helloword.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/jerry/train/modules/helloword/helloword.ko /home/jerry/train/modules/helloword/helloword.o /home/jerry/train/modules/helloword/helloword.mod.o ;  true
