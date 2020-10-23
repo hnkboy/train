@@ -1,5 +1,5 @@
 #include <stdio.h>
-int i=0;
+valatile int i=0;
 void dosomething()
 {
 	printf("do one time\n");

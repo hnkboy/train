@@ -20,5 +20,7 @@ int main()
     printf("%d\n",_v);
     printf("%d\n",_a.a);
     printf("%d\n",clib_min(1,3));
+    printf("%d\n",_v);
+    printf("%d\n",_a.a);
     return 0;
 }

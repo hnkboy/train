@@ -9,13 +9,6 @@ test2.c 加互斥锁正确
 test.3c   __sync_bool_compare_and_swap
 
 
-
-
-
-
-
-
-
 Gcc 4.1.2版本之后，对X86或X86_64支持内置原子操作。就是说，不需要引入第三方库（如pthread）的锁保护，即可对1、2、4、8字节的数值或指针类型，进行原子加/减/与/或/异或等操作。有了这套内置原子操作函数，写程序方便很多。老宋根据Gcc手册中《[Using the GNU Compiler Collection (GCC)](https://link.zhihu.com/?target=http%3A//gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Atomic-Builtins.html)》章节内容，将__sync_系列17个函数声明整理简化如下：
 
 1. **type __sync_fetch_and_add (type \*ptr, type value, ...)**
