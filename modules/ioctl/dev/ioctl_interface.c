@@ -11,7 +11,7 @@
 #include <asm/io.h>
 #include <asm/uaccess.h>
 #include <linux/delay.h>
-#include <linux/cdev.h>	
+#include <linux/cdev.h>
 #include <linux/uaccess.h>
 #include "ioctl_dev.h"
 #include "ioctl.h"
