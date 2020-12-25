@@ -10,5 +10,6 @@ class Test:
 t = Test()
 print(Test.a, t.b)
 t.cal()
+Test.cal(1)
 Test.call()
 
