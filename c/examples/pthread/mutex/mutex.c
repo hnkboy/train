@@ -34,6 +34,7 @@ int main(int argn, char* args[])
 	sleep(3);	
 
 	rc = pthread_mutex_destroy(&mutex);
+	
 	printf("destroy rc = %d \n", rc);
 	return 0;
 }
