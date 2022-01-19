@@ -41,13 +41,13 @@ write_start(void *arg)
     int rc = 0;
 	struct thread_info *tinfo = arg;
 	char *uargv, *p;
-	char *buf = malloc(1024*1024*1024);	
-	memset(buf,0,1024*1024*1024);
+	char *buf = malloc(1024*1024);	
+	memset(buf,0,1024*1024);
 
     //printf("new thread \n");
-    rc = pthread_mutex_lock(&mutex);
+    //rc = pthread_mutex_lock(&mutex);
     //printf("lock rc = %d \n", rc);
-    rc = pthread_mutex_unlock(&mutex);
+    //rc = pthread_mutex_unlock(&mutex);
     //printf("unlock rc = %d \n", rc);
 	
 	printf("Thread %d: top of stack near %p; argv_string=%s\n",
@@ -60,22 +60,29 @@ write_start(void *arg)
 	for (p = uargv; *p != '\0'; p++)
 	   *p = toupper(*p);
 
-	off_t offset = 1*(tinfo->thread_num - 1);
+	off_t offset = (1024*1024)*(tinfo->thread_num - 1);
 	int writed = 0;
+	int wantlen = 0;
 	while(!finished){
-		if (writed == 1024*1024)
+		if (writed == 1024*1024){
 			writed = 0;
+			offset = (1024*1024)*(tinfo->thread_num - 1);
+		}
 		offset += writed; 		
-		lseek(fd, offset,SEEK_SET);
-		rc = write(fd,buf,1024*1024);
+    //pthread_mutex_lock(&mutex);
+		lseek(fd, offset, SEEK_SET);
+	    wantlen =  1024*1024 - writed;
+		rc = write(fd, buf, wantlen);
+    //pthread_mutex_unlock(&mutex);
 		if (rc < 0){
 	   		perror("write error");
 		}
 		else {
 			__atomic_add_fetch(&writebytes, rc, __ATOMIC_SEQ_CST);
 			writed += rc;
-			//handle_debug("thread %d, writebytes %lu, writed %d",tinfo->thread_num,writebytes, writed);	
+			//handle_debug("thread %d, rc = %d,writebytes %lu, writed %d, offset %d. wantlen =%d",tinfo->thread_num,rc,writebytes, writed, offset, wantlen);	
 		}	
+		handle_debug("writen %d",rc + offset);
 		
 	}
     return uargv;
