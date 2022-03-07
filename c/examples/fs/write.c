@@ -12,6 +12,8 @@
 #include <sys/epoll.h>
 #include <stdbool.h>
 
+/*加入定时*/
+#include<sys/time.h>
 
 #define handle_debug(format, ...) \
                do { printf("[%s]  " \
@@ -64,6 +66,8 @@ write_start(void *arg)
 	int writed = 0;
 	int wantlen = 0;
 	while(!finished){
+		struct timeval time_start;
+		struct timeval time_end;
 		if (writed == 1024*1024){
 			writed = 0;
 			offset = (1024*1024)*(tinfo->thread_num - 1);
@@ -83,6 +87,12 @@ write_start(void *arg)
 			//handle_debug("thread %d, rc = %d,writebytes %lu, writed %d, offset %d. wantlen =%d",tinfo->thread_num,rc,writebytes, writed, offset, wantlen);	
 		}	
 		handle_debug("writen %d",rc + offset);
+		/*-jiali 加入延时，支持动态*/
+		gettimeofday(&time_start,nullptr);
+		for(int i=0;i<6553500;i++) //测算执行6553500 次循环的时间
+		gettimeofday(&time_end,nullptr);
+		double a=(time_end.tv_sec-time_start.tv_sec)*1000+(time_end.tv_usec-time_start.tv_usec)/1000;  //转成ms表示
+		printf("Program process time is %lf(ms)\n",a);
 		
 	}
     return uargv;
@@ -219,8 +229,6 @@ int main(int argn, char* argc[]){
 			break;
 		}
     }
-
-
 
 	s = pthread_attr_destroy(&attr);
 	if (s != 0)
