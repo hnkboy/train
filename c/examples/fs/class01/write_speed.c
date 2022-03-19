@@ -97,9 +97,9 @@ write_start(void *arg)
 			errno=0;
 			__atomic_add_fetch(&writebytes, rc, __ATOMIC_SEQ_CST);
 			writed += rc;
-			handle_debug("thread %d, rc = %d,writebytes %lu, writed %d, offset %d. wantlen =%d",tinfo->thread_num,rc,writebytes, writed, offset, wantlen);	
+			//handle_debug("thread %d, rc = %d,writebytes %lu, writed %d, offset %d. wantlen =%d",tinfo->thread_num,rc,writebytes, writed, offset, wantlen);	
 		}	
-		handle_debug("writen %d",rc + offset);
+		//handle_debug("writen %d",rc + offset);
 		
 	}
     return uargv;
@@ -112,7 +112,7 @@ write_start(void *arg)
  *
  *  @return
  */
-int hali_timer_openfd(int iwaits)
+int timer_openfd(int iwaits)
 {
 
 	struct timespec starttime, stintervaltime;
@@ -141,7 +141,59 @@ int hali_timer_openfd(int iwaits)
 
     return itimerfd;
 }
+int pipe_init(int *writefd, int *readfd){
+   // 往管道里面写数据
 
+	// 创建之前首先判断管道文件是否存在
+	// 使用F_OK宏判断文件访问是否OK
+	int ret = access("/var/write.pipe", F_OK);
+	if (ret == -1)
+	{
+		printf("管道不存在，创建 write.pipe\n");
+
+		ret = mkfifo("/var/write.pipe", 0664);
+		if (ret == -1)
+		{
+			perror("mkfifo write.pipe error");
+			exit(0);
+		}
+	}
+	ret = access("/var/read.pipe", F_OK);
+	if (ret == -1)
+	{
+		printf("管道不存在，创建read.pipe\n");
+
+		ret = mkfifo("/var/read.pipe", 0664);
+		if (ret == -1)
+		{
+			perror("mkfifo read.pipe error");
+			exit(0);
+		}
+	}
+
+	// 打开管道，以只读的方式读取管道
+	int read = open("/var/write.pipe", O_RDONLY | O_NONBLOCK);
+	if (read == -1)
+	{
+		perror("open /var/write.pipe");
+		exit(0);
+	}
+	int write = -1;
+/*
+	// 打开管道，以只写的方式读取管道
+	int write = open("/var/read.pipe", O_WRONLY | O_NONBLOCK);
+	if (write == -1)
+	{
+		perror("open /var/read.pipe");
+		exit(0);
+	}
+*/
+
+
+	*writefd = write;	
+	*readfd  = read;
+	return 0;
+}
 int main(int argn, char* argc[]){
     char *path = NULL;
     int rc = 0;
@@ -151,6 +203,8 @@ int main(int argn, char* argc[]){
     pthread_attr_t attr;
 	int epfd = -1;
 	int timefd = -1;
+	int pipe_write_fd = -1;
+	int pipe_read_fd = -1;
 
 	int iret = -1;
     struct epoll_event event;
@@ -190,8 +244,8 @@ int main(int argn, char* argc[]){
         if (s != 0)
 			handle_error_en(s, "pthread_create");		
 	}
-
-    timefd = hali_timer_openfd(1);
+	/*定时器的使用*/
+    timefd = timer_openfd(1);
 	if (timefd < 0)
 		handle_error_en(timefd, "timer_openfd");
 	event.events=EPOLLIN;
@@ -199,6 +253,15 @@ int main(int argn, char* argc[]){
 	iret = epoll_ctl(epfd, EPOLL_CTL_ADD, timefd, &event);
 	if (iret < 0)
 		handle_error_en(iret, "epoll_ctl");
+	/*管道的初始化*/
+	iret = pipe_init(&pipe_write_fd, &pipe_read_fd);
+	if (iret < 0)
+		handle_error_en(iret, "pipe error");
+	event.events=EPOLLIN;
+    event.data.fd = pipe_read_fd;
+	iret = epoll_ctl(epfd, EPOLL_CTL_ADD, pipe_read_fd, &event);
+	if (iret < 0)
+		handle_error_en(iret, "epoll_ctl  add failed for pipe");
 
     for( ; ; )
     {
@@ -222,6 +285,18 @@ int main(int argn, char* argc[]){
 					handle_debug("write %lu MB/s",mbytes);
 				}
 				__atomic_and_fetch(&writebytes, zero, __ATOMIC_SEQ_CST);
+			}
+			else if(event.data.fd == pipe_read_fd)
+			{
+				char buf[8092] = {0};
+				handle_debug("epoll event fd=%d",event.data.fd);
+				int len = read(pipe_read_fd, buf ,sizeof(buf));
+				if (len == 0){
+					handle_debug("读失败");
+					break;
+				}
+				handle_debug("收到的数据是：%s len:%d", buf,len);
+				//write(pipe_write_fd,"ok", 2);
 			}
         }
 		if (!n_events) {

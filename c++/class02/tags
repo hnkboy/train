@@ -1,0 +1,25 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+UidContext	map.cc	/^class UidContext$/;"	c	file:
+check_data	map.cc	/^int UidContext::check_data()$/;"	f	class:UidContext
+cost	map.cc	/^int cost[10][10];$/;"	v
+gettime	map.cc	/^string UidContext::gettime()$/;"	f	class:UidContext
+id	map.cc	/^        int id;$/;"	m	struct:uidmap	file:
+id_map	map.cc	/^        int id_map;$/;"	m	struct:uidmap	file:
+infile	map.cc	/^    ifstream infile;  \/\/输入流$/;"	m	class:UidContext	file:
+length	map.cc	/^        int length;$/;"	m	struct:uidmap	file:
+main	map.cc	/^int main()$/;"	f
+operator <	map.cc	/^        bool operator< (const uidmap &a)  const$/;"	f	struct:uidmap
+outfile	map.cc	/^    ofstream outfile; \/\/输出流  $/;"	m	class:UidContext	file:
+save_data	map.cc	/^void UidContext::save_data(){$/;"	f	class:UidContext
+total	map.cc	/^	int total;$/;"	m	class:UidContext	file:
+uid_data	map.cc	/^    uid_map_t uid_data;$/;"	m	class:UidContext	file:
+uid_map_t	map.cc	/^}uid_map_t;$/;"	t	typeref:struct:uidmap	file:
+uidmap	map.cc	/^    map<int, uid_map_t> uidmap;$/;"	m	class:UidContext	file:
+uidmap	map.cc	/^typedef struct uidmap$/;"	s	file:
+update_data	map.cc	/^void UidContext::update_data()$/;"	f	class:UidContext
+update_time	map.cc	/^	string update_time;$/;"	m	class:UidContext	file:

@@ -1,0 +1,27 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+COMMAND_INVAILD	ctl.c	/^	COMMAND_INVAILD$/;"	e	enum:__anon1	file:
+COMMAND_SET_SPEED	ctl.c	/^	COMMAND_SET_SPEED,$/;"	e	enum:__anon1	file:
+arg_command_t	ctl.c	/^}arg_command_t;$/;"	t	typeref:enum:__anon1	file:
+argv_string	write_speed.c	/^   char     *argv_string;      \/* From command-line argument *\/$/;"	m	struct:thread_info	file:
+command	ctl.c	/^arg_command_t command = COMMAND_INVAILD;  $/;"	v
+fd	write_speed.c	/^int fd = -1;$/;"	v
+finished	write_speed.c	/^volatile bool finished = false;$/;"	v
+get_cur_time	write_speed.c	/^char *get_cur_time()$/;"	f
+handle_debug	write_speed.c	16;"	d	file:
+handle_error	write_speed.c	20;"	d	file:
+handle_error_en	write_speed.c	40;"	d	file:
+main	ctl.c	/^int main(int argc, char *argv[]){$/;"	f
+main	write_speed.c	/^int main(int argn, char* argc[]){$/;"	f
+mutex	write_speed.c	/^pthread_mutex_t mutex;$/;"	v
+pipe_init	write_speed.c	/^int pipe_init(int *writefd, int *readfd){$/;"	f
+thread_id	write_speed.c	/^   pthread_t thread_id;        \/* ID returned by pthread_create() *\/$/;"	m	struct:thread_info	file:
+thread_info	write_speed.c	/^struct thread_info {    \/* Used as argument to thread_start() *\/$/;"	s	file:
+thread_num	write_speed.c	/^   int       thread_num;       \/* Application-defined thread # *\/$/;"	m	struct:thread_info	file:
+timer_openfd	write_speed.c	/^int timer_openfd(int iwaits)$/;"	f
+write_start	write_speed.c	/^write_start(void *arg)$/;"	f	file:
+writebytes	write_speed.c	/^unsigned long writebytes = 0;$/;"	v

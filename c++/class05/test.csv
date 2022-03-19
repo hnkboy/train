@@ -1,0 +1,3 @@
+num,user,usertype,useruid,tagertuser,targettype,targetuid,priority
+3,name1,nfs,1,user2,type2,2,1
+0,name1,nfs,1,user2,type2,2,1

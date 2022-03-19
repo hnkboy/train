@@ -1,0 +1,38 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+PermitContext	map.cc	/^class PermitContext$/;"	c	file:
+USER_NTFS	map.cc	/^    USER_NTFS=1,$/;"	e	enum:usertype	file:
+USER_UNIX	map.cc	/^    USER_UNIX=2,$/;"	e	enum:usertype	file:
+check_data	map.cc	/^int PermitContext::check_data()$/;"	f	class:PermitContext
+cost	map.cc	/^int cost[10][10];$/;"	v
+find_data	map.cc	/^ void PermitContext::find_data(char *name){$/;"	f	class:PermitContext
+id	map.cc	/^    int id;$/;"	m	struct:permissmap	file:
+id_map	map.cc	/^    int id_map;$/;"	m	struct:permissmap	file:
+infile	map.cc	/^    ifstream infile;  \/\/输入流$/;"	m	class:PermitContext	file:
+insert_map	map.cc	/^void PermitContext::insert_map(map<string, map<int, permit_data_t>> &permitmap,  permit_data_t user_data)$/;"	f	class:PermitContext
+length	map.cc	/^    int length;$/;"	m	struct:permissmap	file:
+main	list.cc	/^int main(){$/;"	f
+main	map.cc	/^int main()$/;"	f
+map_user	map.cc	/^    struct user_t map_user;$/;"	m	struct:permissmap	typeref:struct:permissmap::user_t	file:
+name	map.cc	/^    char name[1024];$/;"	m	struct:user_t	file:
+operator <	map.cc	/^    bool operator< (const permissmap &p)  const$/;"	f	struct:permissmap
+outfile	map.cc	/^    ofstream outfile; \/\/输出流$/;"	m	class:PermitContext	file:
+permissmap	map.cc	/^typedef struct permissmap$/;"	s	file:
+permit_data_t	map.cc	/^}permit_data_t;$/;"	t	typeref:struct:permissmap	file:
+permitmap	map.cc	/^    map<string, map<int, permit_data_t>> permitmap;$/;"	m	class:PermitContext	file:
+priority	map.cc	/^    int priority;$/;"	m	struct:permissmap	file:
+save_data	map.cc	/^void UidContext::save_data(){$/;"	f	class:UidContext
+total	map.cc	/^    int total;$/;"	m	class:PermitContext	file:
+type	map.cc	/^    char type[1024];$/;"	m	struct:user_t	file:
+uid	map.cc	/^    int uid;$/;"	m	struct:user_t	file:
+update_data	map.cc	/^void PermitContext::update_data()$/;"	f	class:PermitContext
+update_time	map.cc	/^    string update_time;$/;"	m	class:PermitContext	file:
+user	map.cc	/^    struct user_t user;$/;"	m	struct:permissmap	typeref:struct:permissmap::user_t	file:
+user_data	map.cc	/^    permit_data_t user_data;$/;"	m	class:PermitContext	file:
+user_t	map.cc	/^struct user_t{$/;"	s	file:
+user_type_t	map.cc	/^}user_type_t;$/;"	t	typeref:enum:usertype	file:
+usertype	map.cc	/^typedef enum usertype{$/;"	g	file:

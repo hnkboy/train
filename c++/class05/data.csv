@@ -1,0 +1,11 @@
+num,type,srcuser,dstuser,priority
+1,windowstounix,user1,user2,4
+2,windowstounix,user2,user5,3
+3,windowstounix,user3,user5,3
+4,windowstounix,user1,user3,1
+5,windowstounix,user1,user4,1
+6,windowstounix,user1,user5,1
+7,windowstounix,user5,user5,1
+8,windowstounix,user6,user5,1
+9,windowstounix,usff,fdfd,2
+10,windowstounix,usfff,fdfddd,4
