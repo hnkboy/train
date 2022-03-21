@@ -19,22 +19,8 @@
                do { printf("[%s]  " \
                            format \
                            "\n", __func__, ##__VA_ARGS__); } while (0)
-#define handle_error(fmt, ...) printf("%s   "  fmt   " :%s\n", get_cur_time(), ##__VA_ARGS__, strerror(errno))
- 
-char *get_cur_time()
-{
-    static char s[20];
-    time_t t;
-    struct tm* ltime;
-    time(&t); 
-    ltime = localtime(&t);
- 
-    strftime(s, 20, "%Y-%m-%d %H:%M:%S", ltime);
- 
- 
-    return s;
-}                                                       
-                                                   
+
+
 pthread_mutex_t mutex;
 int fd = -1;
 volatile bool finished = false;
@@ -42,8 +28,8 @@ unsigned long writebytes = 0;
 #define handle_error_en(en, msg) \
 	   do { errno = en; perror(msg); exit(EXIT_FAILURE); } while (0)
 
-//#define handle_error(msg) \
-//	   do { perror(msg); exit(EXIT_FAILURE); } while (0)
+#define handle_error(msg) \
+	   do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
 struct thread_info {    /* Used as argument to thread_start() */
    pthread_t thread_id;        /* ID returned by pthread_create() */
@@ -57,7 +43,7 @@ write_start(void *arg)
     int rc = 0;
 	struct thread_info *tinfo = arg;
 	char *uargv, *p;
-	char *buf = malloc(1024*1024);	
+	char *buf = malloc(1024*1024);
 	memset(buf,0,1024*1024);
 
     //printf("new thread \n");
@@ -65,7 +51,7 @@ write_start(void *arg)
     //printf("lock rc = %d \n", rc);
     //rc = pthread_mutex_unlock(&mutex);
     //printf("unlock rc = %d \n", rc);
-	
+
 	printf("Thread %d: top of stack near %p; argv_string=%s\n",
 		   tinfo->thread_num, &p, tinfo->argv_string);
 
@@ -86,23 +72,20 @@ write_start(void *arg)
 			writed = 0;
 			offset = (1024*1024)*(tinfo->thread_num - 1);
 		}
-		offset += writed; 		
-        //pthread_mutex_lock(&mutex);
-		//lseek(fd, offset, SEEK_SET);
+		offset += writed;
+    //pthread_mutex_lock(&mutex);
+		lseek(fd, offset, SEEK_SET);
 	    wantlen =  1024*1024 - writed;
-		//rc = write(fd, buf, wantlen);
-		rc = pwrite(fd, buf, wantlen, offset);
-        //pthread_mutex_unlock(&mutex);
+		rc = write(fd, buf, wantlen);
+    //pthread_mutex_unlock(&mutex);
 		if (rc < 0){
-	   		perror("write error");	
-			handle_error("thread %d", tinfo->thread_num);
+	   		perror("write error");
 		}
 		else {
-			errno=0;
 			__atomic_add_fetch(&writebytes, rc, __ATOMIC_SEQ_CST);
 			writed += rc;
-			handle_debug("thread %d, rc = %d,writebytes %lu, writed %d, offset %d. wantlen =%d",tinfo->thread_num,rc,writebytes, writed, offset, wantlen);	
-		}	
+			//handle_debug("thread %d, rc = %d,writebytes %lu, writed %d, offset %d. wantlen =%d",tinfo->thread_num,rc,writebytes, writed, offset, wantlen);
+		}
 		handle_debug("writen %d",rc + offset);
 		/*-jiali 加入延时，支持动态*/
 		gettimeofday(&time_start,nullptr);
@@ -110,7 +93,7 @@ write_start(void *arg)
 		gettimeofday(&time_end,nullptr);
 		double a=(time_end.tv_sec-time_start.tv_sec)*1000+(time_end.tv_usec-time_start.tv_usec)/1000;  //转成ms表示
 		printf("Program process time is %lf(ms)\n",a);
-		
+
 	}
     return uargv;
 }
@@ -122,7 +105,7 @@ write_start(void *arg)
  *
  *  @return
  */
-int hali_timer_openfd(int iwaits)
+int timer_openfd(int iwaits)
 {
 
 	struct timespec starttime, stintervaltime;
@@ -185,11 +168,11 @@ int main(int argn, char* argc[]){
     rc = pthread_mutex_init(&mutex, NULL);
     if (rc < 0)
         perror("pthread_mutex_init");
-	
+
     tinfo = calloc(num_threads, sizeof(struct thread_info));
     if (tinfo == NULL)
 		handle_error("calloc");
-	
+
     handle_debug("start threads fd=%d",fd);
     rc = open(path, O_CREAT|O_SYNC);
 	for (tnum = 0; tnum < num_threads; tnum++) {
@@ -198,10 +181,10 @@ int main(int argn, char* argc[]){
 		tinfo[tnum].argv_string = "test";
 		s = pthread_create(&tinfo[tnum].thread_id, &attr, &write_start, &tinfo[tnum]);
         if (s != 0)
-			handle_error_en(s, "pthread_create");		
+			handle_error_en(s, "pthread_create");
 	}
 
-    timefd = hali_timer_openfd(1);
+    timefd = timer_openfd(1);
 	if (timefd < 0)
 		handle_error_en(timefd, "timer_openfd");
 	event.events=EPOLLIN;
@@ -227,7 +210,7 @@ int main(int argn, char* argc[]){
 				mbytes = __atomic_load_n(&writebytes, __ATOMIC_SEQ_CST)/(1024*1024);
 				if(mbytes <= 0){
 					kbytes = __atomic_load_n(&writebytes, __ATOMIC_SEQ_CST)/(1024);
-					handle_debug("write %lu KB/s",kbytes);	
+					handle_debug("write %lu KB/s",kbytes);
 				}else{
 					handle_debug("write %lu MB/s",mbytes);
 				}
