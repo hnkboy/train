@@ -57,6 +57,20 @@ int main(int argc , char ** argv)
 		printf("inet_pton error for %s\n",argv[1]);
 		exit(1);
 	}//if
+#if 0
+	struct sockaddr_in clntaddr;
+	//inet_pton(AF_INET , "127.0.0.1" , &clntaddr.sin_addr);
+	clntaddr.sin_family = AF_INET;
+	clntaddr.sin_addr.s_addr = INADDR_ANY;
+	clntaddr.sin_port = htons(900);
+	if (bind(sockfd, (struct sockaddr *)&clntaddr, sizeof(clntaddr)) != 0)
+	{
+			
+		printf("bind error \n");
+		exit(1);
+	}
+#endif
+	
 
 	/*(3) 发送链接服务器请求*/
 	if( connect(sockfd , (struct sockaddr *)&servaddr , sizeof(servaddr)) < 0)
@@ -64,7 +78,14 @@ int main(int argc , char ** argv)
 		perror("connect error");
 		exit(1);
 	}//if
-
+	struct sockaddr_in localaddr;
+	socklen_t addrlen = sizeof(localaddr);
+	if (getsockname(sockfd,(struct sockaddr*)&localaddr, &addrlen)<0)
+	{
+		exit(1);	
+	}
+	printf("id = %s\n", inet_ntoa(localaddr.sin_addr));
+	printf("port = %d\n",ntohs(localaddr.sin_port));
 	/*(4) 消息处理*/
 	char sendline[MAX_LINE] , recvline[MAX_LINE];
 	while(fgets(sendline , MAX_LINE , stdin) != NULL)	
